@@ -1,0 +1,133 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+```
+
+
+```{r}
+data = read_csv('data/form-1__survey.csv')
+head(data)
+```
+Survey overview
+```{r}
+time_taken_seconds = data %>% dplyr::mutate(time_seconds = difftime(End_time, Start_time, units = "hours")) %>% summarise(total_time_seconds = sum(time_seconds))
+paste('Total cells', nrow(data))
+paste('Total time' ,  format(time_taken_seconds$total_time_seconds))
+```
+
+```{r}
+species_count = function(species_group_column) { 
+  data$species = data[[species_group_column]]
+  data %>% select(title, species) %>% separate_rows(species, convert = TRUE, sep = ",") %>% na.omit() %>% group_by(species) %>% mutate(species = trimws(species)) %>% summarise(cell_count = n()) %>% arrange(cell_count)  
+}
+```
+
+# Bird Presence
+```{r}
+columns = colnames(data) 
+columns[columns %>% startsWith('Birds_')]
+```
+
+```{r}
+species_count('Birds_Songbirds')
+```
+
+```{r}
+species_count('Birds_Warblers')
+```
+
+```{r}
+species_count('Birds_Finches')
+```
+
+```{r}
+species_count('Birds_Tits')
+```
+
+```{r}
+species_count('Birds_Crows')
+```
+
+```{r}
+species_count('Birds_Pigeons')
+```
+
+```{r}
+species_count('Birds_Aerial')
+```
+
+```{r}
+species_count('Birds_Other')
+```
+
+# Insects Presence
+```{r}
+columns[columns %>% startsWith('Insects_')]
+```
+
+```{r}
+species_count('Insects_Butterflies')
+```
+
+```{r}
+species_count('Insects_Moths')
+```
+
+```{r}
+species_count('Insects_Bumblebees')
+```
+
+```{r}
+species_count('Insects_Hoverflies')
+```
+
+```{r}
+species_count('Insects_Other')
+```
+
+# Plants Presence
+```{r}
+columns[columns %>% startsWith('Plants_')]
+```
+
+```{r}
+species_count('Plants_Trees')
+```
+
+```{r}
+species_count('Plants_Midstory')
+```
+
+```{r}
+species_count('Plants_Ferns')
+```
+
+```{r}
+species_count('Plants_Orchids')
+```
+
+```{r}
+species_count('Plants_Fungi')
+```
+
+```{r}
+species_count('Plants_Micro')
+```
+
+```{r}
+species_count('Plants_Grasses')
+```
+
+```{r}
+species_count('Plants_Other')
+```
+
+```{r}
+species_count('Plants_Other_Heather')
+```
+
