@@ -20,10 +20,15 @@ paste('Total cells', nrow(data))
 paste('Total time' ,  format(time_taken_seconds$total_time_seconds))
 ```
 
+Locations
+```{r}
+data %>% group_by(Land_use) %>% summarise(record_count = n()) %>% select(Land_use, record_count) %>% arrange(desc(record_count))
+```
+
 ```{r}
 species_count = function(species_group_column) { 
   data$species = data[[species_group_column]]
-  data %>% select(title, species) %>% separate_rows(species, convert = TRUE, sep = ",") %>% na.omit() %>% group_by(species) %>% mutate(species = trimws(species)) %>% summarise(cell_count = n()) %>% arrange(cell_count)  
+  data %>% select(title, species) %>% separate_rows(species, convert = TRUE, sep = ",") %>% na.omit() %>% group_by(species) %>% mutate(species = trimws(species)) %>% summarise(cell_count = n()) %>% arrange(desc(cell_count))
 }
 ```
 
